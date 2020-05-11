@@ -49,7 +49,7 @@
 	<script>
 	$(document).on('tag-refresh', (e) => {
 		let url = _brayworth_.url( '<?= $this->route ?>/?v=tags&f=<?= urlencode( $this->data->dto->file) ?>');
-		console.log( url);
+		// console.log( url);
 
 		$('#<?= $_uid ?>').load( url);
 
@@ -133,7 +133,6 @@
 					$('input[name="property_id"]', '#<?= $_form ?>').val( o.id);
 
 				},
-				appendTo : d,
 
 			})
 

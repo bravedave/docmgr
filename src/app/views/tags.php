@@ -46,7 +46,7 @@ $(document).ready( () => {
 
                 },
 
-            }).then( function( d) {
+            }).then( ( d) => {
                 _brayworth_.growl( d);
                 if ( 'ack' == d.response) {
                     $(document).trigger('tag-refresh');
