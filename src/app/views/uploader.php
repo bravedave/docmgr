@@ -25,7 +25,7 @@ $(document).ready( () => {
 
         },
         onUpload : ( d) => {
-        	$(document).trigger( 'queue-refresh');
+            $(document).trigger( 'queue-refresh');
 
         }
 
