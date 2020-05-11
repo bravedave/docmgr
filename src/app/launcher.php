@@ -9,26 +9,26 @@
 */
 
 namespace dvc\docmgr;
-use dvc\application;
 
-class launcher {
-	static function run() {
-		if ( class_exists('application')) {
-			/**
-			 * Extended example, uses an application directory structure
-			 *
-			 * To use this example, install bravedave/dvc
-			 * 	composer require bravedave/dvc
-			 *
-			 * then review the folders
-			 *  controller
-			 *  app
-			 */
-
-			new application( dirname( __DIR__));
+if ( class_exists('application')) {
+	class launcher extends \application {
+		function __construct( $rootPath) {
+			$this->defaultController = 'dvc\docmgr\controller';
+			parent::__construct( $rootPath);
 
 		}
-		else {
+
+		static function run( $dir = null) {
+			new self( $dir ? $dir : dirname( __DIR__));
+
+		}
+
+	}
+
+}
+else {
+	class launcher {
+		static function run() {
 			/**
 			 * Yeah - the Minimum Viable Product
 			 */
