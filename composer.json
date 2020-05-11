@@ -18,7 +18,7 @@
             }
         ],
     "require": {
-        "bravedave/dvc": "dev-master",
+        "bravedave/dvc": "^1.8",
         "setasign/fpdi": "^2.3",
         "setasign/fpdf": "^1.8"
     },
