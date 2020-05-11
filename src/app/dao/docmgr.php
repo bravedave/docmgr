@@ -125,6 +125,33 @@ class docmgr extends _dao {
 
 	}
 
+	public function getRange( string $from, string $to) : array {
+		$w = [
+			sprintf( '`uploaded` BETWEEN "%s" AND "%s 23:59"', $from, $to)
+
+		];
+
+		$sql = sprintf( 'SELECT
+				*
+			FROM
+				`docmgr`
+			WHERE
+				%s', implode( ' AND ', $w));
+
+		// \sys::logSQL( sprintf('<%s> %s', $sql, __METHOD__));
+
+
+		if ( $res = $this->Result( $sql)) {
+			return $res->dtoSet( null, $this->template);
+
+		}
+
+		return [];
+
+	}
+
+
+
 	public function queue( int $id = 0) : array {
 		if ( !( $id = (int)$id)) {
 			$id = currentUser::id();

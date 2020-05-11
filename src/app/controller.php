@@ -11,6 +11,7 @@
 namespace dvc\docmgr;
 use currentUser;
 use Json;
+use strings;
 use sys;
 
 class controller extends \Controller {
@@ -18,7 +19,9 @@ class controller extends \Controller {
 	protected $label = config::label;
 
 	protected function before() {
+
 		config::docmgr_checkdatabase();
+		// config::route_register( 'docmgr', 'dvc\docmgr\controller');
 		parent::before();
 
 		// sys::logger( sprintf('<%s> %s', 'hear me !', __METHOD__));
@@ -184,6 +187,10 @@ class controller extends \Controller {
 					if ( 'handler' == $this->getParam( 'v')) {
 						// \sys::logger( sprintf('<%s> %s', $this->route, __METHOD__));
 						$this->load( 'handler');
+						if ( !$dto->filed) {
+							$this->load( 'filer');
+
+						}
 
 					}
 					elseif ( 'tags' == $this->getParam( 'v')) {
@@ -204,9 +211,37 @@ class controller extends \Controller {
 			$this->render([
 				'title' => $this->title = $this->label,
 				'primary' => 'blank',
-				'secondary' => ['index','uploader','queue']]);
+				'secondary' => ['index','index-handler','uploader','queue']]);
 
 		}
+
+	}
+
+	public function report() {
+		$from = $this->getParam( 'from', date( 'Y-m-d', strtotime( '-1 weeks')));
+		$to = $this->getParam( 'to', date( 'Y-m-d'));
+
+		$title = sprintf( '%s - %s - %s',
+			strings::asLocalDate( $from),
+			strings::asLocalDate( $to),
+			$this->label
+
+		);
+
+		$dao = new dao\docmgr;
+		$this->data = (object)[
+			'title' => $title,
+			'from' => $from,
+			'to' => $to,
+			'dtoSet' => $dao->getRange( $from, $to)
+
+		];
+
+		$this->render([
+			'title' => $this->title = $this->label,
+			'primary' => 'report',
+			'secondary' => ['index','index-handler']]);
+			//'secondary' => ['index','uploader','queue']]);
 
 	}
 

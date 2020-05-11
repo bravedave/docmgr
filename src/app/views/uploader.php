@@ -9,15 +9,16 @@
 */  ?>
 
 <div class="row">
-    <div class="col" id="<?= $uid = strings::rand() ?>">
-        <div></div>
-
-    </div>
+    <div class="col" id="<?= $uid = strings::rand() ?>"></div>
 
 </div>
 <script>
 $(document).ready( () => {
-    let c = _brayworth_.fileDragDropContainer().appendTo('#<?= $uid ?>');
+    let c = _brayworth_.fileDragDropContainer({
+        fileControl : true,
+
+    }).appendTo('#<?= $uid ?>');
+
     _brayworth_.fileDragDropHandler.call( c, {
         url : '<?= strings::url( $this->route ) ?>',
         postData : {

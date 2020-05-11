@@ -72,7 +72,7 @@ abstract class postHandler {
 
                             $uploads[] = $_target;
                             $a = [
-                                'path' => $path . '/',
+                                'path' => $path . DIRECTORY_SEPARATOR,
                                 'file' => $_target,
                                 'name' => $file['name'],
                                 'uploaded' => \db::dbTimeStamp(),
