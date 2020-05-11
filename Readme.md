@@ -1,4 +1,4 @@
-## DOCMGR - Document Manager
+## DOCMGR - Document Filing System
 
 Extension for https://github.com/bravedave/mvp.
 
