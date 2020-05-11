@@ -31,6 +31,9 @@ $(document)
 	let content = $('[data-role="content-primary"]');
 	content.html('');
 
+	$('#<?= $queueHandler ?>').html('');
+	$('#<?= $queueID ?>').html('<div class="spinner-border d-block mt-4 mx-auto" role="status"><span class="sr-only">Loading...</span></div>');
+
 	_brayworth_.post({
 		url : _brayworth_.url( '<?= $this->route ?>'),
 		data : {

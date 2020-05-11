@@ -11,7 +11,7 @@
 namespace dvc\docmgr;
 
 class config extends \config {
-	const docmgr_db_version = 0.01;
+	const docmgr_db_version = 0.02;
 
     const label = 'Store and Retrieve';
 

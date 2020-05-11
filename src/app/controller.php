@@ -93,6 +93,33 @@ class controller extends \Controller {
 			} else { \Json::nak( $action); }
 
 		}
+		elseif ( 'filed' == $action) {
+			if ( $id = (int)$this->getPost('id')) {
+				$dao = new dao\docmgr;
+				if ( $dto = $dao->getByID( $id)) {
+					$dao->UpdateByID( ['filed' => 1], $id);
+					Json::ack( $action);
+
+				} else { Json::nak( $action); }
+
+			} else { Json::nak( $action); }
+
+		}
+		elseif ( 'property-set' == $action) {
+			if ( $id = (int)$this->getPost('id')) {
+				if ( $pid = (int)$this->getPost('property_id')) {
+					$dao = new dao\docmgr;
+					if ( $dto = $dao->getByID( $id)) {
+						$dao->UpdateByID( ['property_id' => $pid], $id);
+						Json::ack( $action);
+
+					} else { Json::nak( $action); }
+
+				} else { Json::nak( $action); }
+
+			} else { Json::nak( $action); }
+
+		}
 		elseif ( 'get-queue' == $action) {
 			$dao = new dao\docmgr;
 			\Json::ack( $action)->add('data', $dao->queue());

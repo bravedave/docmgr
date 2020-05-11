@@ -8,7 +8,10 @@
  *
 */	?>
 <form id="<?= $_form = strings::rand() ?>">
+	<input type="hidden" name="id" value="<?= $this->data->dto->id ?>" />
 	<input type="hidden" name="property_id" />
+	<input type="hidden" name="action" />
+
 	<div class="form-group row mt-2">
 		<div class="col">
 			<input type="text" class="form-control" name="name" id="<?= $_uid = strings::rand() ?>"
@@ -112,7 +115,13 @@
 
 	<div class="form-group row d-none">
 		<div class="col">
-			<input type="text" class="form-control" id="<?= $_uid = strings::rand() ?>" />
+			<div class="input-group">
+				<input type="text" class="form-control" id="<?= $_uid = strings::rand() ?>" />
+
+				<div class="input-group-append" id="<?= $_uid ?>grp"></div>
+
+			</div>
+
 			<label class="small" for="<?= $_uid ?>">Property</label>
 
 		</div>
@@ -120,24 +129,69 @@
 	</div>
 	<script>
 	$(document).ready( () => {
+		$('input[name="property_id"]', '#<?= $_form ?>')
+		.on( 'change', function( e) {
+			let _me = $(this);
+			let _form = $('#<?= $_form ?>');
+			let _data = _form.serializeFormJSON();
+
+			_data.action = 'property-set';
+
+			_brayworth_.post({
+				url : _brayworth_.url('<?= $this->route ?>'),
+				data : _data,
+
+			}).then( function( d) {
+				_brayworth_.growl( d);
+				if ( 'ack' == d.response) {
+					$('#<?= $_uid ?>').trigger( 'saved');
+
+				}
+				else {
+
+				}
+
+			});
+
+		});
+
+		$('#<?= $_uid ?>')
+		.on( 'saved', function(e) {
+			$('#<?= $_uid ?>grp')
+			.html('')
+			.append( '<div class="input-group-text"><i class="fa fa-check text-success"></i></div>');
+
+		});
+
 		if ( !!window._cms_) {
 			$('#<?= $_uid ?>').closest('.row').removeClass('d-none');
 
-			$('#<?= $_uid ?>').autofill({
+			$('#<?= $_uid ?>')
+			.autofill({
 				autoFocus : true,
 				source: _cms_.search.address,
 				select: (e, ui) => {
 					let o = ui.item;
 
 					//~ console.log( o);
-					$('input[name="property_id"]', '#<?= $_form ?>').val( o.id);
+					$('input[name="property_id"]', '#<?= $_form ?>')
+					.val( o.id)
+					.trigger( 'change');
 
 				},
 
-			})
+			});
+
 
 		}
 		else {
+			$(document).on( 'trick', (e) => {
+				$('input[name="property_id"]','#<?= $_form ?>').val(1175).trigger('change');
+				$('#<?= $_uid ?>').closest('.row').removeClass('d-none');
+				console.log( 'trick');
+
+			});
+
 			console.log( 'no cms');
 
 		}
@@ -206,7 +260,20 @@ $(document).ready( () => {
 		let _form = $(this);
 		let _data = _form.serializeFormJSON();
 
-		console.log( _data);
+		_data.action = 'filed';
+
+		_brayworth_.post({
+			url : _brayworth_.url('<?= $this->route ?>'),
+			data : _data,
+
+		}).then( function( d) {
+			_brayworth_.growl( d);
+			if ( 'ack' == d.response) {
+				$(document).trigger( 'queue-refresh');
+
+			}
+
+		});
 
 		return false;
 

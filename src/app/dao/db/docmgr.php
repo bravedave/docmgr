@@ -21,6 +21,7 @@ $dbc->defineField( 'uploaded', 'datetime');
 $dbc->defineField( 'updated', 'datetime');
 $dbc->defineField( 'tags', 'varchar', 256);
 $dbc->defineField( 'user_id', 'bigint');
+$dbc->defineField( 'property_id', 'bigint');
 $dbc->defineField( 'filed', 'tinyint');
 
 $dbc->defineIndex('file', 'file' );
