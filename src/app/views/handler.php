@@ -9,7 +9,7 @@
 */	?>
 <form id="<?= $_form = strings::rand() ?>">
 	<input type="hidden" name="id" value="<?= $this->data->dto->id ?>" />
-	<input type="hidden" name="property_id" />
+	<input type="hidden" name="property_id" value="<?= $this->data->dto->property_id ?>" />
 	<input type="hidden" name="action" />
 
 	<div class="form-group row mt-2">
@@ -149,9 +149,6 @@
 					$('#<?= $_uid ?>').trigger( 'saved');
 
 				}
-				else {
-
-				}
 
 			});
 
@@ -184,6 +181,25 @@
 
 			});
 
+
+			((fld) => {
+				if ( fld.length > 0) {
+					if ( Number( fld.val()) > 0) {
+						console.log( fld.val());
+						_cms_.getPropertyByID( fld.val())
+						.then( (d) => {
+							if ( 'ack' == d.response) {
+								$('#<?= $_uid ?>').val( d.data.address_street);
+
+							}
+
+						});
+
+					}
+
+				}
+
+			})( $('input[name="property_id"]', '#<?= $_form ?>'));
 
 		}
 		else {

@@ -87,10 +87,13 @@ class config extends \config {
 
 	static function docmgr_Path() {
 		$path = implode( DIRECTORY_SEPARATOR, [
-			trim( self::dataPath(), '/'),
+			rtrim( self::dataPath(), '/'),
 			'docMgr'
 
 		]);
+
+		// \sys::logger( sprintf('<%s> %s', self::dataPath(), __METHOD__));
+		// \sys::logger( sprintf('<%s> %s', $path, __METHOD__));
 
 		if ( ! is_dir( $path)) {
 			mkdir( $path);

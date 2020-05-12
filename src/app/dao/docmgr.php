@@ -87,6 +87,19 @@ class docmgr extends _dao {
 
 	}
 
+	public function delete( $id) {
+		if ( $dto = $this->getByID( $id)) {
+			if ( \file_exists( $path = $this->getRealPath( $dto))) {
+				\unlink( $path);
+
+			}
+
+			parent::delete( $id);
+
+		}
+
+	}
+
 	public function deleteTag( dto\docmgr $dto, string $tag) : bool {
 		if ( $dto->tags) {
 			$tags = (array)json_decode( $dto->tags);
@@ -125,21 +138,13 @@ class docmgr extends _dao {
 
 	}
 
-	public function getRange( string $from, string $to) : array {
-		$w = [
-			sprintf( '`uploaded` BETWEEN "%s" AND "%s 23:59"', $from, $to)
-
-		];
-
+	protected function getFor( array $conditions ) : array {
 		$sql = sprintf( 'SELECT
 				*
 			FROM
 				`docmgr`
 			WHERE
-				%s', implode( ' AND ', $w));
-
-		// \sys::logSQL( sprintf('<%s> %s', $sql, __METHOD__));
-
+				%s', implode( ' AND ', $conditions));
 
 		if ( $res = $this->Result( $sql)) {
 			return $res->dtoSet( null, $this->template);
@@ -150,7 +155,26 @@ class docmgr extends _dao {
 
 	}
 
+	public function getForProperty( int $id) : array {
+		return $this->getFor([
+			sprintf( '`property_id` = %d', $id)
 
+		]);
+
+	}
+
+	public function getRange( string $from, string $to) : array {
+		return $this->getFor([
+			sprintf( '`uploaded` BETWEEN "%s" AND "%s 23:59"', $from, $to)
+
+		]);
+
+	}
+
+	public function getRealPath( dto\docmgr $dto) : string {
+		return realpath( $path = $dto->path . $dto->file);
+
+	}
 
 	public function queue( int $id = 0) : array {
 		if ( !( $id = (int)$id)) {
@@ -158,7 +182,17 @@ class docmgr extends _dao {
 
 		}
 
-		if ( $res = $this->Result( sprintf( 'SELECT * FROM docmgr WHERE filed = 0 AND user_id = %d ORDER BY id ASC', $id))) {
+		$_sql = sprintf( 'SELECT
+				*
+			FROM
+				`%s`
+			WHERE
+				`filed` = 0
+				AND `user_id` = %d
+			ORDER BY
+				`id` DESC', $this->_db_name, $id);
+
+		if ( $res = $this->Result( $_sql)) {
 			return ( $res->dtoSet( function( $dto) {
 				return (object)['file' => $dto->file];
 

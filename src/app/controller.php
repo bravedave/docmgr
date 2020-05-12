@@ -96,6 +96,15 @@ class controller extends \Controller {
 			} else { \Json::nak( $action); }
 
 		}
+		elseif ( 'delete' == $action) {
+			if ( $id = (int)$this->getPost('id')) {
+				$dao = new dao\docmgr;
+				$dao->delete( $id);
+				Json::ack( $action);
+
+			} else { Json::nak( $action); }
+
+		}
 		elseif ( 'filed' == $action) {
 			if ( $id = (int)$this->getPost('id')) {
 				$dao = new dao\docmgr;
@@ -242,6 +251,26 @@ class controller extends \Controller {
 			'primary' => 'report',
 			'secondary' => ['index','index-handler']]);
 			//'secondary' => ['index','uploader','queue']]);
+
+	}
+
+	public function reportOfProperty( $id) {
+		if ( $id = (int)$id ) {
+			$dao = new dao\docmgr;
+			if ( $dtoSet = $dao->getForProperty( $id)) {
+
+				$this->data = (object)[
+					'title' => $this->label,
+					'dtoSet' => $dtoSet
+
+				];
+
+				$this->load( 'report');
+
+			}
+
+		}
+
 
 	}
 

@@ -13,8 +13,13 @@
 
 	<div class="form-group row">
 		<div class="col">
-			<button type="submit" class="btn btn-outline-primary btn-block">
+			<button type="submit" class="btn btn-outline-primary">
 				file
+
+			</button>
+
+			<button type="button" class="btn btn-outline-danger" id="<?= $_delete = strings::rand() ?>">
+				delete
 
 			</button>
 
@@ -44,9 +49,47 @@ $(document).ready( () => {
 
 		});
 
-		console.log( 'filed');
-
 		return false;
+
+	});
+
+	$('#<?= $_delete ?>').on( 'click', function( e) {
+		_brayworth_.ask({
+			headClass: 'text-white bg-danger',
+			text: 'Are you sure ?',
+			title: 'Confirm Delete',
+			buttons : {
+				yes : function() {
+					$(this).modal('hide');
+
+					let _form = $('#<?= $_form ?>');
+					let _data = _form.serializeFormJSON();
+
+					_data.action = 'delete';
+
+					_brayworth_.post({
+						url : _brayworth_.url('<?= $this->route ?>'),
+						data : _data,
+
+					}).then( function( d) {
+						if ( 'ack' == d.response) {
+							$(document).trigger( 'clear-doc-handler');
+							$(document).trigger( 'queue-refresh');
+
+						}
+						else {
+							_brayworth_.growl( d);
+
+						}
+
+					});
+
+
+				}
+
+			}
+
+		});
 
 	});
 

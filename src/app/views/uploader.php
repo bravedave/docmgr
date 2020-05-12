@@ -21,6 +21,7 @@ $(document).ready( () => {
 
     _brayworth_.fileDragDropHandler.call( c, {
         url : '<?= strings::url( $this->route ) ?>',
+        queue : true,
         postData : {
             action : 'upload'
 
