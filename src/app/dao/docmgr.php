@@ -123,13 +123,46 @@ class docmgr extends _dao {
 
 	}
 
+	public function getOfFolder( string $folder) : array {
+		$flds = [
+			'id',
+			'file',
+			'name',
+			'uploaded',
+			'folder',
+			'tags',
+			'user_id',
+			'property_id',
+			'filed',
+
+		];
+
+		$sql = sprintf(
+			'SELECT `%s` FROM docmgr WHERE folder = "%s"',
+			implode( '`,`', $flds),
+			$this->escape( $folder));
+
+
+		if ( $res = $this->Result( $sql)) {
+			return ( $res->dtoSet( null, $this->template));
+
+		}
+
+		return [];
+
+	}
+
 	public function getTags( dto\docmgr $dto) : array {
 		return $dto->tags ? (array)json_decode( $dto->tags) : [];
 
 	}
 
 	public function getByFileName( string $filename) {
-		if ( $res = $this->Result( sprintf( 'SELECT * FROM docmgr WHERE file = "%s"', $this->escape( $filename)))) {
+		$sql = sprintf(
+			'SELECT * FROM docmgr WHERE file = "%s"',
+			$this->escape( $filename));
+
+		if ( $res = $this->Result( $sql)) {
 			return ( self::extendDTO( $res->dto( $this->template)));
 
 		}

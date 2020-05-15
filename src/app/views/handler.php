@@ -24,7 +24,7 @@
 
 	</div>
 
-	<div class="form-group row">
+	<div class="form-group row"><!-- file name -->
 		<div class="col">
 			<div class="input-group">
 				<input type="text" class="form-control" readonly value="<?= $this->data->dto->file; ?>" />
@@ -63,7 +63,82 @@
 	});
 	</script>
 
-	<div class="form-group row">
+	<div class="form-group row d-none"><!-- folder -->
+		<div class="col">
+			<select class="form-control"
+				data-folder="<?= $this->data->dto->folder ?>"
+				id="<?= $_uid = strings::rand() ?>"></select>
+
+			<label class="small" for="<?= $_uid ?>">folder</label>
+
+		</div>
+
+		<script>
+		$(document).ready( () => {
+			let _select = $('#<?= $_uid ?>');
+
+			_select.on( 'change', function( e) {
+				_brayworth_.post({
+					url : _brayworth_.url('<?= $this->route ?>'),
+					data : {
+						action : 'set-folder',
+						id : <?= (int)$this->data->dto->id ?>,
+						folder : _select.val()
+
+					},
+
+				}).then( function( d) {
+					if ( 'ack' == d.response) {
+						_select.data('folder', _select.val());
+
+					}
+
+				});
+
+
+			});
+
+			let _data = _select.data();
+
+			_select.html('');
+
+			_brayworth_.post({
+				url : _brayworth_.url('<?= $this->route ?>'),
+				data : {
+					action : 'folders-get'
+
+				},
+
+			}).then( function( d) {
+				if ( 'ack' == d.response) {
+					_select.html('<option value=""></option>');
+					$.each( d.data, ( i, folder) => {
+						let o = $('<option />').val( folder).html( folder);
+						if ( folder == _data.folder) {
+							o.prop( 'selected', true);
+
+						}
+
+						o.appendTo( _select);
+
+					});
+
+					_select.closest('.form-group').removeClass('d-none');
+
+				}
+				else {
+					_brayworth_.growl( d);
+
+				}
+
+			});
+
+		});
+		</script>
+
+	</div>
+
+	<div class="form-group row"><!-- tag -->
 		<div class="col">
 			<div class="input-group">
 				<input type="text" class="form-control" id="<?= $_uid = strings::rand() ?>" />
@@ -115,107 +190,109 @@
 
 	</div>
 
-	<div class="form-group row d-none">
-		<div class="col">
-			<div class="input-group">
-				<input type="text" class="form-control" id="<?= $_uid = strings::rand() ?>" />
+	<!-- property -->
+		<div class="form-group row d-none">
+			<div class="col">
+				<div class="input-group">
+					<input type="text" class="form-control" id="<?= $_uid = strings::rand() ?>" />
 
-				<div class="input-group-append" id="<?= $_uid ?>grp"></div>
+					<div class="input-group-append" id="<?= $_uid ?>grp"></div>
+
+				</div>
+
+				<label class="small" for="<?= $_uid ?>">Property</label>
 
 			</div>
 
-			<label class="small" for="<?= $_uid ?>">Property</label>
-
 		</div>
+		<script>
+		$(document).ready( () => {
+			$('input[name="property_id"]', '#<?= $_form ?>')
+			.on( 'change', function( e) {
+				let _me = $(this);
+				let _form = $('#<?= $_form ?>');
+				let _data = _form.serializeFormJSON();
 
-	</div>
-	<script>
-	$(document).ready( () => {
-		$('input[name="property_id"]', '#<?= $_form ?>')
-		.on( 'change', function( e) {
-			let _me = $(this);
-			let _form = $('#<?= $_form ?>');
-			let _data = _form.serializeFormJSON();
+				_data.action = 'property-set';
 
-			_data.action = 'property-set';
+				_brayworth_.post({
+					url : _brayworth_.url('<?= $this->route ?>'),
+					data : _data,
 
-			_brayworth_.post({
-				url : _brayworth_.url('<?= $this->route ?>'),
-				data : _data,
-
-			}).then( function( d) {
-				_brayworth_.growl( d);
-				if ( 'ack' == d.response) {
-					$('#<?= $_uid ?>').trigger( 'saved');
-
-				}
-
-			});
-
-		});
-
-		$('#<?= $_uid ?>')
-		.on( 'saved', function(e) {
-			$('#<?= $_uid ?>grp')
-			.html('')
-			.append( '<div class="input-group-text"><i class="fa fa-check text-success"></i></div>');
-
-		});
-
-		if ( !!window._cms_) {
-			$('#<?= $_uid ?>').closest('.row').removeClass('d-none');
-
-			$('#<?= $_uid ?>')
-			.autofill({
-				autoFocus : true,
-				source: _cms_.search.address,
-				select: (e, ui) => {
-					let o = ui.item;
-
-					//~ console.log( o);
-					$('input[name="property_id"]', '#<?= $_form ?>')
-					.val( o.id)
-					.trigger( 'change');
-
-				},
-
-			});
-
-
-			((fld) => {
-				if ( fld.length > 0) {
-					if ( Number( fld.val()) > 0) {
-						console.log( fld.val());
-						_cms_.getPropertyByID( fld.val())
-						.then( (d) => {
-							if ( 'ack' == d.response) {
-								$('#<?= $_uid ?>').val( d.data.address_street);
-
-							}
-
-						});
+				}).then( function( d) {
+					_brayworth_.growl( d);
+					if ( 'ack' == d.response) {
+						$('#<?= $_uid ?>').trigger( 'saved');
 
 					}
 
-				}
-
-			})( $('input[name="property_id"]', '#<?= $_form ?>'));
-
-		}
-		else {
-			$(document).on( 'trick', (e) => {
-				$('input[name="property_id"]','#<?= $_form ?>').val(1175).trigger('change');
-				$('#<?= $_uid ?>').closest('.row').removeClass('d-none');
-				console.log( 'trick');
+				});
 
 			});
 
-			console.log( 'no cms');
+			$('#<?= $_uid ?>')
+			.on( 'saved', function(e) {
+				$('#<?= $_uid ?>grp')
+				.html('')
+				.append( '<div class="input-group-text"><i class="fa fa-check text-success"></i></div>');
 
-		}
+			});
 
-	});
-	</script>
+			if ( !!window._cms_) {
+				$('#<?= $_uid ?>').closest('.row').removeClass('d-none');
+
+				$('#<?= $_uid ?>')
+				.autofill({
+					autoFocus : true,
+					source: _cms_.search.address,
+					select: (e, ui) => {
+						let o = ui.item;
+
+						//~ console.log( o);
+						$('input[name="property_id"]', '#<?= $_form ?>')
+						.val( o.id)
+						.trigger( 'change');
+
+					},
+
+				});
+
+
+				((fld) => {
+					if ( fld.length > 0) {
+						if ( Number( fld.val()) > 0) {
+							console.log( fld.val());
+							_cms_.getPropertyByID( fld.val())
+							.then( (d) => {
+								if ( 'ack' == d.response) {
+									$('#<?= $_uid ?>').val( d.data.address_street);
+
+								}
+
+							});
+
+						}
+
+					}
+
+				})( $('input[name="property_id"]', '#<?= $_form ?>'));
+
+			}
+			else {
+				$(document).on( 'trick', (e) => {
+					$('input[name="property_id"]','#<?= $_form ?>').val(1175).trigger('change');
+					$('#<?= $_uid ?>').closest('.row').removeClass('d-none');
+					console.log( 'trick');
+
+				});
+
+				console.log( 'no cms');
+
+			}
+
+		});
+		</script>
+	<!-- /property -->
 
 </form>
 

@@ -1,4 +1,4 @@
 .bak
-vendor/
+vendor
 *.lock
-src/data/
+src/data

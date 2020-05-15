@@ -117,6 +117,34 @@ class controller extends \Controller {
 			} else { Json::nak( $action); }
 
 		}
+		elseif ( 'folder-create' == $action) {
+			if ( $folder = $this->getPost( 'folder')) {
+				if ( !preg_match( '/[^0-9a-z]/i', $folder)) {
+					if ( folders::Create( $folder)) {
+						Json::ack( $action);
+
+					} else { Json::nak( $action); }
+
+				} else { Json::nak( $action); }
+
+			} else { Json::nak( $action); }
+
+		}
+		elseif ( 'folder-get-files' == $action) {
+			$folders = new folders;
+			if ( $folder = $this->getPost( 'folder')) {
+				Json::ack( $action)
+					->add( 'data', $folders->getFiles( $folder));
+
+			} else { Json::nak( $action); }
+
+		}
+		elseif ( 'folders-get' == $action) {
+			$folders = new folders;
+			Json::ack( $action)
+				->add( 'data', $folders->get());
+
+		}
 		elseif ( 'property-set' == $action) {
 			if ( $id = (int)$this->getPost('id')) {
 				if ( $pid = (int)$this->getPost('property_id')) {
@@ -135,6 +163,20 @@ class controller extends \Controller {
 		elseif ( 'get-queue' == $action) {
 			$dao = new dao\docmgr;
 			\Json::ack( $action)->add('data', $dao->queue());
+
+		}
+		elseif ( 'set-folder' == $action) {
+			if ( $id = (int)$this->getPost('id')) {
+				$folder = $this->getPost( 'folder');
+				$dao = new dao\docmgr;
+
+				if ( $dto = $dao->getByID( $id)) {
+					$dao->UpdateByID( ['folder' => $folder], $dto->id);
+					Json::ack( $action);
+
+				} else { Json::nak( $action); }
+
+			} else { Json::nak( $action); }
 
 		}
 		elseif ( 'tag-add' == $action) {
@@ -223,6 +265,36 @@ class controller extends \Controller {
 				'secondary' => ['index','index-handler','uploader','queue']]);
 
 		}
+
+	}
+
+	public function files() {
+		if ( $folder = $this->getParam( 'folder')) {
+			$folders = new folders;
+			$this->data = (object)[
+				'title' => $folder,
+				'dtoSet' => $folders->getFiles( $folder)
+
+			];
+
+			$this->load( 'report');
+
+		}
+
+	}
+
+	public function folders() {
+		$this->data = (object)[
+			'folders' => folders::Iterator()
+
+		];
+
+		$this->render([
+			'title' => $this->title = $this->label,
+			'primary' => 'folders',
+			'secondary' => ['index']
+
+		]);
 
 	}
 

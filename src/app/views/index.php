@@ -19,4 +19,9 @@
 
 	</li>
 
+	<li class="nav-item">
+		<a class="nav-link" href="<?= strings::url( 'docmgr/folders') ?>">Folders</a>
+
+	</li>
+
 </ul>
