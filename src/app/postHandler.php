@@ -113,7 +113,7 @@ abstract class postHandler {
                                             $dao = new \dao\properties;
                                             if ( $dto = $dao->getPropertyByStreet( $_search)) {
                                                 $a['property_id'] = $dto->id;
-                                                $a['folder'] = \json_encode( ['SmokeAlarm']);
+                                                $a['folder'] = 'SmokeAlarm';
                                                 $a['tags'] = \json_encode( ['Smoke Alarm']);
                                                 if ( $debug) \sys::logger( sprintf('<%s = %s> %s', $_search, $dto->address_street, __METHOD__));
 
