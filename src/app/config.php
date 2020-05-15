@@ -11,7 +11,7 @@
 namespace dvc\docmgr;
 
 class config extends \config {
-	const docmgr_db_version = 0.03;
+	const docmgr_db_version = 0.04;
 
     const label = 'Store and Retrieve';
 
@@ -88,7 +88,7 @@ class config extends \config {
 	static function docmgr_Folders() {
 		$path = implode( DIRECTORY_SEPARATOR, [
 			self::docmgr_Path(),
-			'Foldersr'
+			'Folders'
 
 		]);
 
