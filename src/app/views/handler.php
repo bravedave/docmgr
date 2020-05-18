@@ -286,7 +286,7 @@
 
 				});
 
-				console.log( 'no cms');
+				// console.log( 'no cms');
 
 			}
 

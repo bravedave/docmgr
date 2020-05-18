@@ -16,7 +16,7 @@ use strings;
     <div id="<?= $_accordion ?>report" class="collapse show" data-parent="#<?= $_accordion ?>">
         <div class="table-responsive">
             <h4 class="d-none d-print-block"><?= $this->data->title ?></h4>
-            <table class="table" id="<?= $tblID = strings::rand(); ?>">
+            <table class="table table-sm" id="<?= $tblID = strings::rand(); ?>">
                 <thead>
                     <tr>
                         <td>#</td>

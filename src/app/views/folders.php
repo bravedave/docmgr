@@ -136,6 +136,11 @@ $(document).ready( () => {
     })
     .trigger('refresh');
 
+    $(document).on( 'docmgr-folder-refresh', (e) => {
+        $('#<?= $_uid ?>').trigger('refresh');
+
+    });
+
     $('#<?= $_form ?>')
     .on( 'submit', function( e) {
         let _form = $(this);
@@ -158,7 +163,7 @@ $(document).ready( () => {
                 $('input[name="folder"]', '#<?= $_form ?>').val('');
 
                 if ( 'ack' == d.response) {
-                    $('#<?= $_uid ?>').trigger( 'refresh');
+                    $(document).trigger( 'docmgr-folder-refresh');
 
                 }
                 else {
