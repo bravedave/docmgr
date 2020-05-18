@@ -227,7 +227,11 @@ class docmgr extends _dao {
 
 		if ( $res = $this->Result( $_sql)) {
 			return ( $res->dtoSet( function( $dto) {
-				return (object)['file' => $dto->file];
+				return (object)[
+					'id' => $dto->id,
+					'file' => $dto->file
+
+				];
 
 			}));
 

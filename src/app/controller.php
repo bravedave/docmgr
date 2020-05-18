@@ -105,6 +105,33 @@ class controller extends \Controller {
 			} else { Json::nak( $action); }
 
 		}
+		elseif ( 'file-selected' == $action) {
+			if ( $_ids = $this->getPost('ids')) {
+
+				$done = 0;
+				$ids = explode( ',', $_ids);
+				$dao = new dao\docmgr;
+				foreach ($ids as $id) {
+					if ( $id = (int)$id) {
+						if ( $dto = $dao->getByID( $id)) {
+							$dao->UpdateByID( ['filed' => 1], $id);
+							$done ++;
+
+						}
+
+					}
+
+				}
+
+				if ( $done) {
+					Json::ack( $action)
+						->add( 'count', $done);
+
+				} else { Json::nak( $action); }
+
+			} else { Json::nak( $action); }
+
+		}
 		elseif ( 'filed' == $action) {
 			if ( $id = (int)$this->getPost('id')) {
 				$dao = new dao\docmgr;
