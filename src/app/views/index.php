@@ -56,7 +56,7 @@ $(document).ready( () => {
 						.attr( 'href', _brayworth_.url( '<?= $this->route ?>/folders/' + fldr))
 						.data( 'folder', fldr)
 						.html( fldr)
-						.prepend('<i class="fa fa-fw fa-folder-o mr-1"></i>')
+						.prepend('<i class="fa fa-fw fa-folder-o ml-0 mr-1"></i>')
 						.appendTo( li)
 						.on( 'click', function( e) {
 							e.stopPropagation();e.preventDefault();
