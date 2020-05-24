@@ -65,7 +65,7 @@ $(document).ready( () => {
 							let _data = _me.data();
 							let url = _brayworth_.url( '<?= $this->route ?>/files/?folder=' + encodeURIComponent( _data.folder));
 
-							let title = $('<div class="border-bottom"></div>').html( '<i class="fa fa-fw fa-folder-open-o"></i>' + _data.folder);
+							let title = $('<div class="border-bottom"></div>').html( '<i class="fa fa-fw fa-folder-open-o mr-1"></i>' + _data.folder);
 							let div = $('<div style="height: calc( 100% - 2em);"></div>');
 
 							$('[data-role="content-primary"]')
