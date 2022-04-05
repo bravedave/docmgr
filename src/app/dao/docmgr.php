@@ -11,7 +11,7 @@
 namespace dvc\docmgr\dao;
 
 use currentUser;
-use dao\_dao;
+use dvc\dao\_dao;
 
 class docmgr extends _dao {
 	protected $_db_name = 'docmgr';

@@ -9,6 +9,6 @@
 */
 
 namespace dvc\docmgr\dao\dto;
-use dao\dto\_dto;
+use dvc\dao\dto\_dto;
 
 class docmgr extends _dto {}
