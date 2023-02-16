@@ -8,18 +8,21 @@
  *
 
 	You can use php's built in server
-	php -S localhost:80 -c  c:\php\php.ini-development _mvp.php
+	php -S localhost:8080 -c  c:\php\php.ini-development _mvp.php
 
 	if you do, check first and exit if it's a public resource - Serve that instead
 	 */
 if (preg_match('/\.(?:png|ico|jpg|jpeg|gif|css|js)$/', $_SERVER['REQUEST_URI'])) {
-	if ( file_exists( trim( $_SERVER['REQUEST_URI'], ' /\\')))
-		return false;    // serve the requested resource as-is.
 
+  if (file_exists(trim($_SERVER['REQUEST_URI'], ' /\\'))) return false;    // serve the requested resource as-is.
 }
 
 // load the autoloader
-require __DIR__ . '/../vendor/autoload.php';
+if (file_exists($autoload = __DIR__ . '/../../vendor/autoload.php')) {
 
-// run the application
-dvc\docmgr\launcher::run();
+  require $autoload;
+} elseif (file_exists($autoload = __DIR__ . '/../vendor/autoload.php')) {
+
+  require $autoload;
+}
+application::run(); // run the application
