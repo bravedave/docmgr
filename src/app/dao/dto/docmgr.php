@@ -10,9 +10,9 @@
 
 namespace dvc\docmgr\dao\dto;
 
-use dvc\dao\dto\_dto;
+use bravedave\dvc\dto;
 
-class docmgr extends _dto {
+class docmgr extends dto {
 
   public $id = 0;
   public $file = '';

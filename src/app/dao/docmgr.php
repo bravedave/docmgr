@@ -15,7 +15,7 @@ use bravedave\dvc\dao;
 
 class docmgr extends dao {
 	protected $_db_name = 'docmgr';
-	protected $template = '\dvc\docmgr\dao\dto\docmgr';
+	protected $template = dto\docmgr::class;
 
 	protected static function extendDTO($dto) {
 		if ($dto) {

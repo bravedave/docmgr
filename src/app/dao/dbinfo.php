@@ -10,13 +10,19 @@
 
 namespace dvc\docmgr\dao;
 
-use bravedave;
+use bravedave\dvc\{dbinfo as dvcDbInfo, logger};
 
-class dbinfo extends bravedave\dvc\dbinfo {
-  protected $_store = '';
+class dbinfo extends dvcDbInfo {
+	/*
+	 * it is probably sufficient to copy this file into the <application>/app/dao folder
+	 *
+	 * from there store you structure files in <application>/dao/db folder
+	 */
+	protected function check() {
 
-  protected function check() {
+		logger::info(sprintf('<%s> %s', 'runnning', __METHOD__));
 
-    $this->checkDIR(__DIR__);
-  }
+		parent::check();
+		parent::checkDIR(__DIR__);
+	}
 }
